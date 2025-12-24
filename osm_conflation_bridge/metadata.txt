@@ -1,0 +1,10 @@
+[general]
+name=OSM Conflation Bridge
+description=A generic tool to browse features and conflate them with OpenStreetMap via JOSM.
+about=Navigate through QGIS features, fetch building IDs via Overpass, and sync tags to JOSM.
+version=0.1
+author=rmic
+email=raph.mic@gmail.com
+repository=https://github.com/rmic/osm-conflation-bridge
+category=Plugins
+qgisMinimumVersion=3.0

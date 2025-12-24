@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# QGIS / Plugin specific
+*.pyc
+.vscode/
+.idea/
+*.log
+osm_bridge_config.json
+ambulance_tool_state.json
+
+# Local state files
+*.swp
+*.swo
