@@ -61,4 +61,4 @@ Setup JOSM: Ensure JOSM is running and Remote Control is enabled in the settings
 
 ## 📄 License
 
-Distributed under the MIT License.
+Distributed under the GPLv2 License.

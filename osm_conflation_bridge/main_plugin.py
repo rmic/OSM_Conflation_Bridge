@@ -1,3 +1,6 @@
+# Copyright (c) 2025 rmic
+# Licensed under the terms of GNU GPL v2
+
 import os, json, requests
 from qgis.utils import iface
 from qgis.core import QgsWkbTypes, QgsProject, QgsMapLayerProxyModel, QgsFieldProxyModel
