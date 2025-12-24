@@ -1,4 +1,4 @@
-theme: jekyll-theme-cayman
+theme: jekyll-theme-minimal
 title: OSM Conflation Bridge
 description: A QGIS-to-JOSM live link for rapid data conflation.
 show_downloads: true
