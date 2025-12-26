@@ -9,6 +9,7 @@ __pycache__/
 ._*
 Thumbs.db
 ehthumbs.db
+__MACOSX
 
 # QGIS / Plugin specific
 *.pyc

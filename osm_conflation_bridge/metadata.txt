@@ -9,3 +9,4 @@ repository=https://github.com/rmic/osm-conflation-bridge
 category=Plugins
 qgisMinimumVersion=3.0
 license=GPL version 2 or greater
+icon=icon.png

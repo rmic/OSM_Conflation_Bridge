@@ -6,9 +6,10 @@ from qgis.utils import iface
 from qgis.core import QgsWkbTypes, QgsProject, QgsMapLayerProxyModel, QgsFieldProxyModel
 from qgis.gui import QgsRubberBand, QgsMapLayerComboBox, QgsFieldComboBox
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
                              QLabel, QTextEdit, QDockWidget, QTabWidget, 
-                             QLineEdit, QTableWidget, QTableWidgetItem, QComboBox)
+                             QLineEdit, QTableWidget, QTableWidgetItem, QComboBox, QAction)
 
 class ConflationBridgeDock(QDockWidget):
     def __init__(self, iface, parent=None):
@@ -267,9 +268,29 @@ class ConflationBridgePlugin:
         self.dock = None
 
     def initGui(self):
-        # This creates the sidebar when the plugin is enabled
+
+        icon_path = os.path.join(os.path.dirname(__file__), 'icon.png')
+
         self.dock = ConflationBridgeDock(self.iface)
+        
+        self.action = QAction(
+            QIcon(icon_path), 
+            "Show OSM Conflation Bridge", 
+            self.iface.mainWindow()
+        )
+        
+        self.action.triggered.connect(self.toggle_dock)
+
+        self.iface.addPluginToVectorMenu("OSM Conflation Bridge", self.action)
+        
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock)
+        self.dock.hide()
+
+    def toggle_dock(self):
+        if self.dock.isVisible():
+            self.dock.hide()
+        else:
+            self.dock.show()
 
     def unload(self):
         # This cleans up the sidebar when the plugin is disabled
