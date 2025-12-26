@@ -3,10 +3,11 @@
 
 import os, json, requests
 from qgis.utils import iface
-from qgis.core import QgsWkbTypes, QgsProject, QgsMapLayerProxyModel, QgsFieldProxyModel
+from qgis.core import QgsWkbTypes, QgsProject, QgsMapLayerProxyModel, QgsFieldProxyModel, QgsApplication
 from qgis.gui import QgsRubberBand, QgsMapLayerComboBox, QgsFieldComboBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QUrl, QVariant
 from PyQt5.QtGui import QIcon
+from PyQt5.QtNetwork import QNetworkRequest, QNetworkAccessManager
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
                              QLabel, QTextEdit, QDockWidget, QTabWidget, 
                              QLineEdit, QTableWidget, QTableWidgetItem, QComboBox, QAction)
@@ -93,6 +94,8 @@ class ConflationBridgeDock(QDockWidget):
         self.btn_apply.clicked.connect(self.refresh_data)
         self.btn_next.clicked.connect(self.next_feature)
         self.btn_prev.clicked.connect(self.prev_feature)
+
+        self.nam = QgsApplication.networkAccessManager()
 
     def add_tag_row(self):
         row = self.tag_table.rowCount()
@@ -196,7 +199,7 @@ class ConflationBridgeDock(QDockWidget):
         except: pass
 
         # Load/Zoom/Select in JOSM
-        url = "http://127.0.0.1:8111/load_and_zoom"
+        base_url = "http://127.0.0.1:8111/load_and_zoom"
         params = {
             "left": lon - 0.001, "right": lon + 0.001,
             "top": lat + 0.001, "bottom": lat - 0.001,
@@ -204,11 +207,14 @@ class ConflationBridgeDock(QDockWidget):
         }
         if osm_id: params["select"] = f"way{osm_id}"
         
-        try:
-            requests.get(url, params=params, timeout=2)
-            print(f"Sent to JOSM: {tag_str}")
-        except:
-            print("JOSM Connection Failed")
+        params_str = "&".join([f"{k}={v}" for k, v in params.items()])
+        
+
+        url = QUrl(f"{base_url}?{params_str}")
+        
+        request = QNetworkRequest(url)
+        self.nam.get(request)
+        
 
     def next_feature(self):
         if self.index < len(self.features)-1: self.index += 1; self.update_view()
@@ -275,13 +281,14 @@ class ConflationBridgePlugin:
         
         self.action = QAction(
             QIcon(icon_path), 
-            "Show OSM Conflation Bridge", 
+            "Toggle OSM Conflation Bridge", 
             self.iface.mainWindow()
         )
         
         self.action.triggered.connect(self.toggle_dock)
 
         self.iface.addPluginToVectorMenu("OSM Conflation Bridge", self.action)
+        self.iface.addVectorToolBarIcon(self.action)
         
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock)
         self.dock.hide()
@@ -296,3 +303,6 @@ class ConflationBridgePlugin:
         # This cleans up the sidebar when the plugin is disabled
         if self.dock:
             self.iface.removeDockWidget(self.dock)
+        
+        self.iface.removePluginVectorMenu("OSM Conflation Bridge", self.action)
+        self.iface.removeToolBarIcon(self.action)
