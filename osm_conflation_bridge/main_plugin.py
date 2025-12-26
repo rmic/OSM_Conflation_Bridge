@@ -3,14 +3,16 @@
 
 import os, json, requests
 from qgis.utils import iface
-from qgis.core import QgsWkbTypes, QgsProject, QgsMapLayerProxyModel, QgsFieldProxyModel, QgsApplication
+from qgis.core import QgsWkbTypes, QgsProject, QgsMapLayerProxyModel, QgsFieldProxyModel, QgsApplication, QgsNetworkAccessManager
 from qgis.gui import QgsRubberBand, QgsMapLayerComboBox, QgsFieldComboBox
-from PyQt5.QtCore import Qt, QUrl, QVariant
+from PyQt5.QtCore import Qt, QUrl, QJsonDocument
 from PyQt5.QtGui import QIcon
-from PyQt5.QtNetwork import QNetworkRequest, QNetworkAccessManager
+from PyQt5.QtNetwork import QNetworkRequest
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
                              QLabel, QTextEdit, QDockWidget, QTabWidget, 
                              QLineEdit, QTableWidget, QTableWidgetItem, QComboBox, QAction)
+
+from .overpass_service import OverpassService
 
 class ConflationBridgeDock(QDockWidget):
     def __init__(self, iface, parent=None):
@@ -20,6 +22,12 @@ class ConflationBridgeDock(QDockWidget):
         self.layout = QVBoxLayout(self.root)
         self.tabs = QTabWidget()
         
+        self.nam = QgsNetworkAccessManager.instance()
+        
+        self.overpass = OverpassService(self)
+        self.overpass.buildingFound.connect(self.on_osm_id_received)
+        self.overpass.errorOccurred.connect(self.on_overpass_error)
+
         # --- TAB 1: SETUP ---
         self.setup_page = QWidget()
         self.setup_layout = QVBoxLayout(self.setup_page)
@@ -95,7 +103,8 @@ class ConflationBridgeDock(QDockWidget):
         self.btn_next.clicked.connect(self.next_feature)
         self.btn_prev.clicked.connect(self.prev_feature)
 
-        self.nam = QgsApplication.networkAccessManager()
+        
+        self.josm_call = None
 
     def add_tag_row(self):
         row = self.tag_table.rowCount()
@@ -167,10 +176,35 @@ class ConflationBridgeDock(QDockWidget):
         self.save_state()
 
     def sync_to_josm(self, fid, geom):
-        """Logic for both Manual Button and Geometry Move"""
-        # Ensure we are working with the correct feature
-        # If triggered by a move, fid might be different, but we check index for tags
+        self.highlight.setToGeometry(geom, self.layer)
         feat = self.layer.getFeature(fid)
+
+        ##  OSM ID Retrieval via Overpass
+        lat, lon = geom.asPoint().y(), geom.asPoint().x()
+        self.josm_call = {"lat": lat, "lon": lon, "feat": feat, "osm_id": None}
+        self.iface.messageBar().pushMessage("OSM Conflation Bridge", "Searching Overpass...", level=0)
+        self.overpass.get_building_id_at(lat, lon)
+
+        # The call to process_josm_call will be made by the success handler (on_osm_id_received) once the OSM ID is received
+
+
+    def on_osm_id_received(self, osm_id):
+        """Handle the OSM ID signal from OverpassService"""
+        self.iface.messageBar().pushMessage("Success", f"Found Building {osm_id}", level=0)
+        self.josm_call["osm_id"] = osm_id
+        self.process_josm_call()
+
+    def on_overpass_error(self, message):
+        """Handle the error signal from OverpassService"""
+        self.iface.messageBar().pushMessage("Overpass Error", message, level=2)
+
+
+
+    def process_josm_call(self):
+
+        lat, lon, feat, osm_id = (self.josm_call["lat"], self.josm_call["lon"], self.josm_call["feat"], self.josm_call["osm_id"])
+        self.josm_call = None
+        ## Tag Preparation
         tags = []
         
         for r in range(self.tag_table.rowCount()):
@@ -183,23 +217,12 @@ class ConflationBridgeDock(QDockWidget):
                 tags.append(f"{k}={val}")
             except Exception as e:
                 print(f"Tag Mapping Error: {e}")
-
-        lat, lon = geom.asPoint().y(), geom.asPoint().x()
-        self.highlight.setToGeometry(geom, self.layer)
-        self.process_josm_call(lat, lon, "|".join(tags))
-
-    def process_josm_call(self, lat, lon, tag_str):
-        # Fetch Building ID via Overpass
-        query = f'[out:json];way["building"](around:15,{lat},{lon});out ids;'
-        osm_id = None
-        try:
-            r = requests.post("https://overpass-api.de/api/interpreter", data={'data': query}, timeout=3)
-            elements = r.json().get('elements', [])
-            if elements: osm_id = elements[0].get('id')
-        except: pass
+        
+        tag_str = "|".join(tags)
 
         # Load/Zoom/Select in JOSM
         base_url = "http://127.0.0.1:8111/load_and_zoom"
+
         params = {
             "left": lon - 0.001, "right": lon + 0.001,
             "top": lat + 0.001, "bottom": lat - 0.001,
