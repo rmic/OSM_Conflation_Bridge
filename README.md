@@ -54,6 +54,10 @@ Setup JOSM: Ensure JOSM is running and Remote Control is enabled in the settings
 - [ ] Add support for Polygon-to-Polygon conflation.
 - [ ] Visual "Checklist" to mark features as "Done" in the source database.
 
+## Questions
+
+Contact me : raph.mic@gmail.com
+
 ## 📄 License
 
 Distributed under the GPLv2+ License.
