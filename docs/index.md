@@ -20,37 +20,37 @@ By automating the "bridge" between QGIS and JOSM, the process becomes much less 
 
 ## 🛠 Installation
 
-1. **Clone the Repository:**
+### **Clone the Repository:**
 
 Until the plugin is accepted in the official repository, clone the repository in the plugins folder of your QGIS installation.
 **Note** : If you are using a profile other than default, replace `default` in the paths below with your specific profile name. 
 
 If you are not sure, you can check the exact path to your profile directly in QGIS by going to `Settings > User Profiles > Open Active Profile Folder`
 
-### MacOS
+#### MacOS
 
    ```bash
-   cd ~/Library/Application\ Support/QGIS/QGIS3/profiles/default/python/plugins
-   git clone [https://github.com/rmic/osm-conflation-bridge.git](https://github.com/rmic/osm-conflation-bridge.git)
+cd ~/Library/Application\ Support/QGIS/QGIS3/profiles/default/python/plugins
+git clone [https://github.com/rmic/osm-conflation-bridge.git](https://github.com/rmic/osm-conflation-bridge.git)
    ```
-### Linux
+#### Linux
 
-    ```bash
-    cd ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
-    git clone https://github.com/rmic/osm-conflation-bridge.git
-    ```
+   ```bash
+cd ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
+git clone https://github.com/rmic/osm-conflation-bridge.git
+   ```
 
-### Windows 
+#### Windows 
 
 Open Command Prompt or Powershell and run 
 
-    ```sh
-    cd %APPDATA%\QGIS\QGIS3\profiles\default\python\plugins
-    git clone https://github.com/rmic/osm-conflation-bridge.git
-    ```
+   ```sh
+cd %APPDATA%\QGIS\QGIS3\profiles\default\python\plugins
+git clone https://github.com/rmic/osm-conflation-bridge.git
+   ```
 
 
-2. **Enable the Plugin:**
+### **Enable the Plugin:**
 After cloning the repository, the plugin must be activated within QGIS:
 
     1. *Restart QGIS* : QGIS scans the plugins folder only on startup.
@@ -58,7 +58,7 @@ After cloning the repository, the plugin must be activated within QGIS:
     3. *Locate the plugin* : Search for "OSM Conflation Bridge" in the "Installed" tab.
     4. *Activate* : Check the box next to the plugin name. The plugin will appear under the Vector menu.
 
-3. **Setup JOSM**
+### **Setup JOSM**
 
 Ensure JOSM is running and Remote Control is enabled in the settings (`Preferences > Remote Control > Enable remote control`)
 
