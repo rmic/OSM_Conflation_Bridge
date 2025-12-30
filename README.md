@@ -50,13 +50,8 @@ Setup JOSM: Ensure JOSM is running and Remote Control is enabled in the settings
 ## 🗺 Roadmap
 
 - [ ] Add a context menu to auto-fill Field names in the tag table.
-- [ ] Implement a "Status" indicator for Overpass API responses.
 - [ ] Add support for Polygon-to-Polygon conflation.
 - [ ] Visual "Checklist" to mark features as "Done" in the source database.
-
-## Questions
-
-Contact me : raph.mic@gmail.com
 
 ## 📄 License
 
