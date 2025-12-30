@@ -27,20 +27,20 @@ Until the plugin is accepted in the official repository, clone the repository in
 
 If you are not sure, you can check the exact path to your profile directly in QGIS by going to `Settings > User Profiles > Open Active Profile Folder`
 
-#### MacOS
+**MacOS**
 
    ```bash
 cd ~/Library/Application\ Support/QGIS/QGIS3/profiles/default/python/plugins
 git clone [https://github.com/rmic/osm-conflation-bridge.git](https://github.com/rmic/osm-conflation-bridge.git)
    ```
-#### Linux
+**Linux**
 
    ```bash
 cd ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
 git clone https://github.com/rmic/osm-conflation-bridge.git
    ```
 
-#### Windows 
+**Windows**
 
 Open Command Prompt or Powershell and run 
 
