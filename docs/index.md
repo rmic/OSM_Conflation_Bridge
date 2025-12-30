@@ -6,20 +6,7 @@ layout: default
 
 This plugin is a small tool designed to make it easier to move data from **QGIS** into **OpenStreetMap** via the **JOSM** editor.
 
-### Why I built this
-This project started when I set out to map every ambulance, fire, and police station in Belgium. I had official open data files with the locations, but I quickly realized that simply importing them wasn't enough. 
-
-Many of the "official" coordinates were slightly offset from the actual buildings on the ground (likely because they were generated from addresses rather than actual footprints). To do the job right, I had to fix the locations in my data while simultaneously adding the correct tags to the buildings in OSM. 
-
-I found myself stuck in a loop: 
-1. Find a marker in QGIS.
-2. Zoom in and pan.
-3. Check the attributes.
-4. Click the JOSM Remote button.
-5. Switch to JOSM to find the building and add the tags.
-6. Switch back to QGIS and repeat.
-
-It was a lot of clicking, zooming, and switching windows, which made it easy to lose track or make mistakes. I decided to spend that time building this plugin to handle the repetitive parts for me.
+For the story behind why this tool was created, check out the [About this Project](story.md) page.
 
 ### What it does
 The goal of the plugin is to reduce the manual "back-and-forth" so you can focus on the data itself:
@@ -31,16 +18,6 @@ The goal of the plugin is to reduce the manual "back-and-forth" so you can focus
 
 By automating the "bridge" between QGIS and JOSM, the process becomes much less of a chore.
 
-
-
-## 🚀 Features
-
-- **Generic Mapping Engine:** Map any QGIS attribute to any OSM tag dynamically.
-- **Live Geometry Sync:** Moving a feature in QGIS automatically updates the location and tags in JOSM.
-- **Overpass Integration:** Automatically identifies existing OSM building IDs at your current location.
-- **Persistent State:** Saves your filters, mappings, and progress automatically between sessions.
-- **Smart Filtering:** Process large datasets by filtering specific attributes 
-
 ## 🛠 Installation
 
 1. **Clone the Repository:**
@@ -51,23 +28,26 @@ Until the plugin is accepted in the official repository, clone the repository in
 If you are not sure, you can check the exact path to your profile directly in QGIS by going to `Settings > User Profiles > Open Active Profile Folder`
 
 ### MacOS
+
    ```bash
    cd ~/Library/Application\ Support/QGIS/QGIS3/profiles/default/python/plugins
    git clone [https://github.com/rmic/osm-conflation-bridge.git](https://github.com/rmic/osm-conflation-bridge.git)
    ```
 ### Linux
-    ```
+
+    ```bash
     cd ~/.local/share/QGIS/QGIS3/profiles/default/python/plugins
     git clone https://github.com/rmic/osm-conflation-bridge.git
     ```
+
 ### Windows 
 
 Open Command Prompt or Powershell and run 
-    ```
+
+    ```sh
     cd %APPDATA%\QGIS\QGIS3\profiles\default\python\plugins
     git clone https://github.com/rmic/osm-conflation-bridge.git
     ```
-
 
 
 2. **Enable the Plugin:**
