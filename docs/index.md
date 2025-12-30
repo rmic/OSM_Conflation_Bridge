@@ -80,20 +80,6 @@ Before you begin, ensure **JOSM** is open and that **Remote Control** is enabled
 5. **Send to JOSM:** Click the **Send to JOSM** button. JOSM will automatically zoom to the building and prompt you to apply the pre-filled tags.
 6. **Verify and Repeat:** Check the data in JOSM, confirm the tags, upload, and click **Next** in QGIS to move to the next data point.
 
-## 📖 How to Use
-
-### 1. Configuration (Setup Tab)
-
-- **Apply:** Click **Apply Configuration** to build your processing queue and jump to the Browser tab.
-
-
-### 2. Execution (Browser Tab)
-- **Navigate:** Use **Next** and **Prev** to jump between features. QGIS will auto-zoom and highlight the current target.
-- **Sync:**
-    - **Manual:** Click the **⚡ Sync to JOSM** button.
-    - **Automatic:** Use the QGIS Vertex Tool to move the point. The move will trigger an automatic update in JOSM.
-- **JOSM Interaction:** The plugin will tell JOSM to download the area, select the building identified by Overpass, and prepare the tags for upload.
-
 ## ⚙️ Technical Requirements
 
 - **QGIS** 3.x
